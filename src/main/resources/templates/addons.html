@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add-ons · Airline Booking System</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Add-ons</h1>
+        <p class="subtitle">
+            Travelling
+            <strong th:text="${source == null or source.isBlank() ? 'Any' : source}"></strong>
+            →
+            <strong th:text="${destination == null or destination.isBlank() ? 'Any' : destination}"></strong>
+            on <strong th:text="${travelDate ?: '—'}"></strong>
+        </p>
+        <p class="subtitle">Pick any extras. Their cost is added to the fare shown in the results.</p>
+
+        <form method="get" th:action="@{/results}">
+            <input type="hidden" name="source" th:value="${source}">
+            <input type="hidden" name="destination" th:value="${destination}">
+            <input type="hidden" name="travelDate" th:value="${travelDate}">
+            <input type="hidden" name="seatClass" th:value="${seatClass}">
+            <input type="hidden" name="sort" th:value="${sort}">
+
+            <label class="addon-option">
+                <input type="checkbox" name="luggage" value="true">
+                <span>
+                    <strong>Extra luggage</strong>
+                    <span class="subtitle">+10% of the fare</span>
+                </span>
+            </label>
+
+            <label class="addon-option">
+                <input type="checkbox" name="meals" value="true">
+                <span>
+                    <strong>Meals</strong>
+                    <span class="subtitle">+₹500 (flat)</span>
+                </span>
+            </label>
+
+            <div class="actions" style="margin-top:18px;">
+                <button class="btn" type="submit">Show flights</button>
+                <a class="btn btn-secondary" th:href="@{/search}">Back</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

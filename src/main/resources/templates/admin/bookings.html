@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookings · Admin</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Bookings</h1>
+        <p class="subtitle"><a th:href="@{/admin}">← Admin</a></p>
+        <div class="alert alert-success" th:if="${message}" th:text="${message}">ok</div>
+    </div>
+
+    <div class="card">
+        <div class="empty" th:if="${#lists.isEmpty(bookings)}">No bookings yet.</div>
+        <table th:if="${not #lists.isEmpty(bookings)}">
+            <thead>
+            <tr>
+                <th>PNR</th><th>Passenger</th><th>Flight</th><th>Route</th>
+                <th>Date</th><th>Seat</th><th>Add-ons</th><th>Total</th><th>Status</th><th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="b : ${bookings}">
+                <td th:text="${b.pnr}">PNR-1001</td>
+                <td th:text="${b.passengerName}">Name</td>
+                <td th:text="${b.flightNumber}">AI-101</td>
+                <td th:text="${b.source} + ' → ' + ${b.destination}">Delhi → Mumbai</td>
+                <td th:text="${b.travelDate ?: '—'}">—</td>
+                <td th:text="${(b.seatClass == null ? '' : (b.seatClass.name() == 'BUSINESS' ? 'Business' : 'Economy')) + ' ' + b.seatNumber}">Economy 1A</td>
+                <td>
+                    <span th:if="${b.extraLuggage}">Luggage </span>
+                    <span th:if="${b.meals}">Meals</span>
+                    <span th:if="${!b.extraLuggage and !b.meals}">None</span>
+                </td>
+                <td th:text="'₹' + ${#numbers.formatDecimal(b.fare,1,2)}">₹0</td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${b.status.name() == 'CONFIRMED' ? 'badge-confirmed' : 'badge-cancelled'}"
+                          th:text="${b.status.name()}">CONFIRMED</span>
+                </td>
+                <td><a class="btn btn-sm" th:href="@{/admin/bookings/{id}/edit(id=${b.id})}">Edit</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

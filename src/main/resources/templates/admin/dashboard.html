@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin · Airline Booking System</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Admin dashboard</h1>
+        <p class="subtitle">Manage flights, passengers and bookings.</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="value" th:text="${flightCount}">0</div>
+            <div class="label">Flights</div>
+        </div>
+        <div class="stat">
+            <div class="value" th:text="${passengerCount}">0</div>
+            <div class="label">Passengers</div>
+        </div>
+        <div class="stat">
+            <div class="value" th:text="${bookingCount}">0</div>
+            <div class="label">Bookings</div>
+        </div>
+        <div class="stat">
+            <div class="value" th:text="'₹' + ${#numbers.formatDecimal(revenue, 1, 2)}">₹0</div>
+            <div class="label">Revenue</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Manage</h2>
+        <div class="actions">
+            <a class="btn" th:href="@{/admin/flights}">Flights</a>
+            <a class="btn" th:href="@{/admin/passengers}">Passengers</a>
+            <a class="btn" th:href="@{/admin/bookings}">Bookings</a>
+            <a class="btn btn-secondary" th:href="@{/admin/reports}">Reports</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

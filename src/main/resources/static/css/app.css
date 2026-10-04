@@ -1,0 +1,496 @@
+:root {
+    --bg: #eef2f7;
+    --surface: #ffffff;
+    --primary: #0d47a1;
+    --primary-dark: #07306e;
+    --accent: #1e88e5;
+    --text: #1b263b;
+    --muted: #64748b;
+    --border: #d7dee8;
+    --success: #2e7d32;
+    --danger: #c62828;
+    --warning: #ef6c00;
+    --radius: 10px;
+    --shadow: 0 6px 20px rgba(13, 71, 161, 0.10);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+}
+
+a {
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Top bar ---------- */
+.topbar {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: #fff;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    box-shadow: var(--shadow);
+}
+
+.topbar .brand {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+}
+
+.topbar .brand span {
+    opacity: 0.8;
+    font-weight: 400;
+}
+
+.topbar nav a {
+    color: #fff;
+    margin-left: 18px;
+    font-size: 0.92rem;
+    opacity: 0.95;
+}
+
+.topbar nav a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Layout ---------- */
+.container {
+    max-width: 1080px;
+    margin: 28px auto;
+    padding: 0 20px;
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    margin-bottom: 22px;
+}
+
+.card h1,
+.card h2 {
+    margin-top: 0;
+    color: var(--primary);
+}
+
+.subtitle {
+    color: var(--muted);
+    margin-top: -6px;
+}
+
+/* ---------- Forms ---------- */
+.form-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: flex-end;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex: 1 1 160px;
+}
+
+.field label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+input,
+select {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: #fff;
+    color: var(--text);
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(30, 136, 229, 0.15);
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+    display: inline-block;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 8px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 0.95rem;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.15s ease;
+}
+
+.btn:hover {
+    background: var(--primary-dark);
+    text-decoration: none;
+}
+
+.btn-secondary {
+    background: #eceff4;
+    color: var(--text);
+}
+
+.btn-secondary:hover {
+    background: #dde3ec;
+}
+
+.btn-danger {
+    background: var(--danger);
+}
+
+.btn-danger:hover {
+    background: #9c1c1c;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+}
+
+/* ---------- Tables ---------- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+th {
+    background: #f5f8fc;
+    color: var(--muted);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+tbody tr:hover {
+    background: #f8fbff;
+}
+
+/* ---------- Badges ---------- */
+.badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.76rem;
+    font-weight: 600;
+}
+
+.badge-confirmed {
+    background: #e3f2e4;
+    color: var(--success);
+}
+
+.badge-cancelled {
+    background: #fde7e7;
+    color: var(--danger);
+}
+
+.badge-economy {
+    background: #e6f0fb;
+    color: var(--primary);
+}
+
+.badge-business {
+    background: #fff3e0;
+    color: var(--warning);
+}
+
+/* ---------- Alerts ---------- */
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 0.92rem;
+}
+
+.alert-error {
+    background: #fde7e7;
+    color: var(--danger);
+    border: 1px solid #f3c2c2;
+}
+
+.alert-success {
+    background: #e3f2e4;
+    color: var(--success);
+    border: 1px solid #bfe2c1;
+}
+
+.alert-info {
+    background: #e6f0fb;
+    color: var(--primary);
+    border: 1px solid #c2d9f3;
+}
+
+/* ---------- Login ---------- */
+.auth-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #0d47a1, #1e88e5 60%, #64b5f6);
+    padding: 20px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+    padding: 34px;
+}
+
+.auth-card h1 {
+    margin: 0 0 4px;
+    color: var(--primary);
+    font-size: 1.5rem;
+}
+
+.auth-card .subtitle {
+    margin-bottom: 22px;
+}
+
+.auth-card .field {
+    margin-bottom: 14px;
+}
+
+/* ---------- Seat map ---------- */
+.seat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 56px);
+    gap: 10px;
+    margin: 16px 0;
+}
+
+.seat {
+    height: 48px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--text);
+    transition: all 0.12s ease;
+}
+
+.seat:hover:not(:disabled) {
+    border-color: var(--accent);
+    background: #e8f2fd;
+}
+
+.seat.selected {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+}
+
+.seat:disabled {
+    background: #f1f3f6;
+    color: #b3bcc9;
+    cursor: not-allowed;
+    text-decoration: line-through;
+}
+
+.legend {
+    display: flex;
+    gap: 18px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 8px;
+}
+
+.legend span::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+    border: 1px solid var(--border);
+}
+
+.legend .free::before {
+    background: #fff;
+}
+
+.legend .taken::before {
+    background: #f1f3f6;
+}
+
+.legend .chosen::before {
+    background: var(--primary);
+}
+
+/* ---------- Ticket ---------- */
+.ticket {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 26px;
+    background: #fff;
+    max-width: 560px;
+}
+
+.ticket h2 {
+    margin-top: 0;
+    letter-spacing: 2px;
+    text-align: center;
+    color: var(--primary);
+}
+
+.ticket .pnr {
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin: 6px 0 18px;
+}
+
+.ticket dl {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: 8px 12px;
+    margin: 0;
+}
+
+.ticket dt {
+    color: var(--muted);
+    font-weight: 600;
+}
+
+.ticket dd {
+    margin: 0;
+}
+
+/* ---------- Stats ---------- */
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.stat {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    box-shadow: var(--shadow);
+}
+
+.stat .value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.stat .label {
+    color: var(--muted);
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.empty {
+    text-align: center;
+    color: var(--muted);
+    padding: 30px;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ---------- Add-on selection ---------- */
+.addon-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    background: #fff;
+}
+
+.addon-option:hover {
+    border-color: var(--accent);
+    background: #f8fbff;
+}
+
+.addon-option input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+}
+
+.addon-option strong {
+    display: block;
+}
+
+.addon-option .subtitle {
+    margin: 0;
+    font-size: 0.82rem;
+}
+
+/* ---------- Pagination ---------- */
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-top: 18px;
+}
+
+.pagination .btn.active {
+    background: var(--primary-dark);
+    color: #fff;
+}
+
+.pagination .btn.disabled {
+    opacity: 0.45;
+    pointer-events: none;
+}

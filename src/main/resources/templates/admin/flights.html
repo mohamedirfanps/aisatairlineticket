@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flights · Admin</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Flights</h1>
+        <p class="subtitle">
+            <a th:href="@{/admin}">← Admin</a> ·
+            Total: <strong th:text="${total}">0</strong>
+        </p>
+        <div class="alert alert-success" th:if="${message}" th:text="${message}">ok</div>
+
+        <form method="get" th:action="@{/admin/flights}" class="form-row">
+            <div class="field">
+                <label for="q">Filter by city</label>
+                <input type="text" id="q" name="q" th:value="${q}" placeholder="e.g. Delhi">
+            </div>
+            <div class="field" style="flex:0 0 auto;">
+                <button class="btn" type="submit">Filter</button>
+            </div>
+            <div class="field" style="flex:0 0 auto;">
+                <a class="btn" th:href="@{/admin/flights/new}">Add flight</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="card">
+        <div class="empty" th:if="${#lists.isEmpty(flights)}">No flights.</div>
+        <table th:if="${not #lists.isEmpty(flights)}">
+            <thead>
+            <tr>
+                <th>ID</th><th>Airline</th><th>Flight</th><th>Route</th>
+                <th>Departs</th><th>Class</th><th>Fare</th><th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="f : ${flights}">
+                <td th:text="${f.id}">1</td>
+                <td th:text="${f.airline}">Airline</td>
+                <td th:text="${f.flightNumber}">AI-101</td>
+                <td th:text="${f.sourceCode} + ' → ' + ${f.destinationCode}">DEL → BOM</td>
+                <td th:text="${f.departureTime == null ? 'TBA' : #temporals.format(f.departureTime, 'HH:mm')}">09:00</td>
+                <td th:text="${f.seatClass.name() == 'BUSINESS' ? 'Business' : 'Economy'}">Economy</td>
+                <td th:text="'₹' + ${#numbers.formatDecimal(f.fare, 1, 2)}">₹5000</td>
+                <td>
+                    <a class="btn btn-sm btn-secondary" th:href="@{/admin/flights/{id}(id=${f.id})}">View</a>
+                    <a class="btn btn-sm" th:href="@{/admin/flights/{id}/edit(id=${f.id})}">Edit</a>
+                    <form method="post" th:action="@{/admin/flights/delete}" style="display:inline;">
+                        <input type="hidden" name="id" th:value="${f.id}">
+                        <button class="btn btn-sm btn-danger" type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

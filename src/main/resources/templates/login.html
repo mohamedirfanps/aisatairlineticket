@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login · Airline Booking System</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div class="auth-wrap">
+    <div class="auth-card">
+        <h1>✈ Airline Booking System</h1>
+        <p class="subtitle">Sign in to search and book flights</p>
+
+        <div class="alert alert-error" th:if="${error}" th:text="${error}">err</div>
+        <div class="alert alert-success" th:if="${message}" th:text="${message}">ok</div>
+
+        <form method="post" th:action="@{/login}">
+            <div class="field">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" th:value="${email}"
+                       placeholder="you@example.com" required>
+            </div>
+            <div class="field">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••" required>
+            </div>
+            <button class="btn btn-block" type="submit">Sign in</button>
+        </form>
+
+        <p class="subtitle" style="margin-top:18px; text-align:center;">
+            No account? <a th:href="@{/register}">Register as passenger</a>
+        </p>
+        <div class="alert alert-info" style="font-size:0.82rem;">
+            Demo logins &mdash; Admin: <strong>admin@airline.com / admin123</strong><br>
+            Passenger: <strong>demo@airline.com / demo123</strong>
+        </div>
+    </div>
+</div>
+</body>
+</html>

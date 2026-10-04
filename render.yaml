@@ -1,0 +1,21 @@
+# Render Blueprint — deploys the Dockerfile as a web service.
+# Docs: https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: airline-booking-system
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /login
+    envVars:
+      - key: PORT
+        value: 8080
+      # Optional: point the SQLite database at a mounted disk for persistence.
+      # - key: AIRLINE_DBURL
+      #   value: jdbc:sqlite:/var/data/airline.db
+    # Optional persistent disk (requires a paid plan on Render). Without it,
+    # the SQLite file resets on each deploy — the demo data regenerates anyway.
+    # disk:
+    #   name: airline-data
+    #   mountPath: /var/data
+    #   sizeGB: 1

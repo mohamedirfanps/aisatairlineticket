@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Passengers · Admin</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Passengers</h1>
+        <p class="subtitle"><a th:href="@{/admin}">← Admin</a></p>
+        <div class="alert alert-success" th:if="${message}" th:text="${message}">ok</div>
+    </div>
+
+    <div class="card">
+        <div class="empty" th:if="${#lists.isEmpty(passengers)}">No passengers registered.</div>
+        <table th:if="${not #lists.isEmpty(passengers)}">
+            <thead>
+            <tr><th>ID</th><th>Name</th><th>Email</th><th>Phone</th><th></th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="p : ${passengers}">
+                <td th:text="${p.id}">1</td>
+                <td th:text="${p.name}">Name</td>
+                <td th:text="${p.email}">email</td>
+                <td th:text="${p.phone}">phone</td>
+                <td><a class="btn btn-sm" th:href="@{/admin/passengers/{id}/edit(id=${p.id})}">Edit</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

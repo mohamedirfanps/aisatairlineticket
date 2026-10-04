@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit passenger · Admin</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Edit passenger</h1>
+        <p class="subtitle"><a th:href="@{/admin/passengers}">← Passengers</a></p>
+
+        <form method="post" th:action="@{/admin/passengers/save}" th:object="${passengerForm}">
+            <input type="hidden" th:field="*{id}">
+            <div class="form-row">
+                <div class="field">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" th:field="*{name}" required>
+                </div>
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" th:field="*{email}" required>
+                </div>
+                <div class="field">
+                    <label for="phone">Phone</label>
+                    <input type="text" id="phone" th:field="*{phone}">
+                </div>
+                <div class="field">
+                    <label for="password">New password (blank = unchanged)</label>
+                    <input type="password" id="password" th:field="*{password}" placeholder="leave blank to keep">
+                </div>
+            </div>
+            <div class="actions" style="margin-top:14px;">
+                <button class="btn" type="submit">Save</button>
+                <a class="btn btn-secondary" th:href="@{/admin/passengers}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

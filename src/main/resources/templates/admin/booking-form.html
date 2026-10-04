@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit booking · Admin</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Edit booking</h1>
+        <p class="subtitle"><a th:href="@{/admin/bookings}">← Bookings</a></p>
+
+        <form method="post" th:action="@{/admin/bookings/save}" th:object="${bookingForm}">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-row">
+                <div class="field">
+                    <label>PNR (read-only)</label>
+                    <input type="text" th:value="${booking.pnr}" readonly disabled>
+                </div>
+                <div class="field">
+                    <label>Flight (read-only)</label>
+                    <input type="text" th:value="${booking.flightNumber}" readonly disabled>
+                </div>
+                <div class="field">
+                    <label>Route (read-only)</label>
+                    <input type="text" th:value="${booking.source} + ' → ' + ${booking.destination}" readonly disabled>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="field">
+                    <label for="passengerName">Passenger name</label>
+                    <input type="text" id="passengerName" th:field="*{passengerName}" required>
+                </div>
+                <div class="field">
+                    <label for="passengerAge">Passenger age</label>
+                    <input type="number" min="1" max="120" id="passengerAge" th:field="*{passengerAge}" required>
+                </div>
+                <div class="field">
+                    <label for="travelDate">Travel date</label>
+                    <input type="date" id="travelDate" th:field="*{travelDate}">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="field">
+                    <label for="seatClass">Seat class</label>
+                    <select id="seatClass" th:field="*{seatClass}">
+                        <option th:each="c : ${seatClasses}" th:value="${c}" th:text="${c}"></option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="seatNumber">Seat number</label>
+                    <input type="text" id="seatNumber" th:field="*{seatNumber}">
+                </div>
+                <div class="field">
+                    <label for="status">Status</label>
+                    <select id="status" th:field="*{status}">
+                        <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}"></option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="field">
+                    <label>Add-ons</label>
+                    <label class="addon-option" style="box-shadow:none;padding:6px;">
+                        <input type="checkbox" th:field="*{extraLuggage}"> Extra luggage
+                    </label>
+                    <label class="addon-option" style="box-shadow:none;padding:6px;">
+                        <input type="checkbox" th:field="*{meals}"> Meals
+                    </label>
+                </div>
+            </div>
+
+            <div class="actions" style="margin-top:14px;">
+                <button class="btn" type="submit">Save changes</button>
+                <a class="btn btn-secondary" th:href="@{/admin/bookings}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

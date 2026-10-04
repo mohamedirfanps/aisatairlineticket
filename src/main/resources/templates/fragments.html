@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- Shared top navigation. Included by every authenticated page. -->
+<header class="topbar" th:fragment="bar">
+    <div class="brand">✈ Airline Booking <span>System</span></div>
+    <nav>
+        <a th:href="@{/search}">Search flights</a>
+        <a th:href="@{/bookings}">My bookings</a>
+        <a th:if="${session.currentUser != null and session.currentUser.role.name() == 'ADMIN'}"
+           th:href="@{/admin}">Admin</a>
+        <span th:if="${session.currentUser != null}"
+              th:text="${session.currentUser.name}">User</span>
+        <a th:href="@{/logout}">Logout</a>
+    </nav>
+</header>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search flights · Airline Booking System</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Search flights</h1>
+        <p class="subtitle">Choose your route and travel date. Flights operate daily.</p>
+        <form method="get" th:action="@{/addons}">
+            <div class="form-row">
+                <div class="field">
+                    <label for="source">From</label>
+                    <select id="source" name="source">
+                        <option value="">Any</option>
+                        <option th:each="a : ${airports}" th:value="${a.city}"
+                                th:text="${a.city} + ' (' + ${a.code} + ', ' + ${a.country} + ')'"></option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="destination">To</label>
+                    <select id="destination" name="destination">
+                        <option value="">Any</option>
+                        <option th:each="a : ${airports}" th:value="${a.city}"
+                                th:text="${a.city} + ' (' + ${a.code} + ', ' + ${a.country} + ')'"></option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="travelDate">Travel date</label>
+                    <input type="date" id="travelDate" name="travelDate"
+                           th:value="${defaultDate}" th:min="${today}" required>
+                </div>
+                <div class="field">
+                    <label for="seatClass">Class</label>
+                    <select id="seatClass" name="seatClass">
+                        <option value="">Any</option>
+                        <option value="ECONOMY">Economy</option>
+                        <option value="BUSINESS">Business</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="sort">Sort by</label>
+                    <select id="sort" name="sort">
+                        <option value="fare">Lowest fare</option>
+                        <option value="duration">Shortest duration</option>
+                    </select>
+                </div>
+                <div class="field" style="flex:0 0 auto;">
+                    <button class="btn" type="submit">Continue</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

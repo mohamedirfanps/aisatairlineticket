@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-ticket · Airline Booking System</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <div class="alert alert-success">Booking confirmed. Your e-ticket is below.</div>
+
+        <div class="ticket">
+            <h2>E-TICKET</h2>
+            <div class="pnr" th:text="${ticket.pnr}">PNR-1001</div>
+            <dl>
+                <dt>Passenger</dt><dd th:text="${ticket.passengerName}">Name</dd>
+                <dt>Flight</dt><dd th:text="${ticket.flightNumber}">AI-101</dd>
+                <dt>Route</dt><dd th:text="${ticket.source} + ' → ' + ${ticket.destination}">Delhi → Mumbai</dd>
+                <dt>Travel date</dt><dd th:text="${ticket.travelDate ?: '—'}">—</dd>
+                <dt>Class</dt>
+                <dd th:text="${ticket.seatClass == null ? '—' : (ticket.seatClass.name() == 'BUSINESS' ? 'Business' : 'Economy')}">Economy</dd>
+                <dt>Seat</dt><dd th:text="${ticket.seatNumber}">1A</dd>
+                <dt>Add-ons</dt>
+                <dd>
+                    <span th:text="${ticket.addOnSummary}">None</span>
+                    (<span th:text="'₹' + ${#numbers.formatDecimal(ticket.addOnAmount ?: 0, 1, 2)}">₹0</span>)
+                </dd>
+                <dt>Total fare</dt><dd th:text="'₹' + ${#numbers.formatDecimal(ticket.fare, 1, 2)}">₹5000</dd>
+                <dt>Issued at</dt>
+                <dd th:text="${ticket.issuedAt == null ? '-' : #temporals.format(ticket.issuedAt, 'dd MMM yyyy HH:mm')}">-</dd>
+            </dl>
+        </div>
+
+        <div class="actions" style="margin-top:20px;">
+            <button class="btn btn-secondary" onclick="window.print()">Print</button>
+            <a class="btn" th:href="@{/bookings}">My bookings</a>
+            <a class="btn btn-secondary" th:href="@{/search}">Book another</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

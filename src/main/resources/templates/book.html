@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book flight · Airline Booking System</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Book your seat</h1>
+        <p class="subtitle">
+            <span th:text="${flight.airline} + ' ' + ${flight.flightNumber}"></span> ·
+            <span th:text="${flight.source} + ' → ' + ${flight.destination}"></span> ·
+            <span th:text="${flight.seatClass.name() == 'BUSINESS' ? 'Business' : 'Economy'}"></span> ·
+            Departs <span th:text="${flight.departureTime == null ? 'TBA' : #temporals.format(flight.departureTime, 'HH:mm')}"></span>
+        </p>
+        <p class="subtitle">
+            Travel date: <strong th:text="${travelDate}"></strong> ·
+            Add-ons: <strong th:text="${addOns.describe()}"></strong>
+        </p>
+    </div>
+
+    <form method="post" th:action="@{/book}" th:object="${bookingForm}">
+        <input type="hidden" th:field="*{flightId}">
+        <input type="hidden" th:field="*{seatNumber}" id="seatNumberInput">
+        <input type="hidden" th:field="*{travelDate}">
+        <input type="hidden" th:field="*{extraLuggage}">
+        <input type="hidden" th:field="*{meals}">
+
+        <div class="card">
+            <h2>Choose a seat</h2>
+            <div class="legend">
+                <span class="free">Available</span>
+                <span class="taken">Booked</span>
+                <span class="chosen">Selected</span>
+            </div>
+            <div class="seat-grid">
+                <button type="button" class="seat"
+                        th:each="s : ${seats}"
+                        th:text="${s.seatNumber}"
+                        th:attr="data-seat=${s.seatNumber}"
+                        th:disabled="${bookedSeats.contains(s.seatNumber)}">1A</button>
+            </div>
+            <p class="subtitle">
+                Selected seat: <strong id="selectedSeatLabel">none</strong>
+            </p>
+        </div>
+
+        <div class="card">
+            <h2>Passenger details</h2>
+            <div class="form-row">
+                <div class="field">
+                    <label for="passengerName">Full name</label>
+                    <input type="text" id="passengerName" th:field="*{passengerName}" required>
+                </div>
+                <div class="field">
+                    <label for="passengerAge">Age</label>
+                    <input type="number" id="passengerAge" min="1" max="120" th:field="*{passengerAge}" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Fare summary</h2>
+            <table>
+                <tbody>
+                <tr><td>Seat fare (<span th:text="${flight.seatClass.name() == 'BUSINESS' ? 'Business' : 'Economy'}"></span>)</td>
+                    <td style="text-align:right;" th:text="'₹' + ${#numbers.formatDecimal(seatFare, 1, 2)}">₹0</td></tr>
+                <tr><td>Add-ons (<span th:text="${addOns.describe()}"></span>)</td>
+                    <td style="text-align:right;" th:text="'₹' + ${#numbers.formatDecimal(addOnAmount, 1, 2)}">₹0</td></tr>
+                <tr><td><strong>Total payable</strong></td>
+                    <td style="text-align:right;"><strong
+                            th:text="'₹' + ${#numbers.formatDecimal(seatFare + addOnAmount, 1, 2)}">₹0</strong></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card">
+            <h2>Payment</h2>
+            <p class="subtitle">This is a simulated payment gateway for the demo.</p>
+            <div class="form-row">
+                <div class="field">
+                    <label for="paymentMethod">Method</label>
+                    <select id="paymentMethod" th:field="*{paymentMethod}" onchange="togglePayment()">
+                        <option value="UPI">UPI</option>
+                        <option value="CARD">Card</option>
+                        <option value="NETBANKING">Net banking</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row" id="upiFields">
+                <div class="field">
+                    <label for="upiId">UPI id</label>
+                    <input type="text" id="upiId" th:field="*{upiId}" placeholder="name@bank">
+                </div>
+            </div>
+
+            <div class="form-row" id="cardFields" style="display:none;">
+                <div class="field">
+                    <label for="cardNumber">Card number</label>
+                    <input type="text" id="cardNumber" th:field="*{cardNumber}" placeholder="16 digits">
+                </div>
+                <div class="field">
+                    <label for="cardHolder">Card holder</label>
+                    <input type="text" id="cardHolder" th:field="*{cardHolder}">
+                </div>
+            </div>
+
+            <div class="form-row" id="bankFields" style="display:none;">
+                <div class="field">
+                    <label for="bank">Bank</label>
+                    <input type="text" id="bank" th:field="*{bank}" placeholder="e.g. SBI">
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="actions">
+                <button class="btn" type="submit">Confirm &amp; pay</button>
+                <a class="btn btn-secondary" th:href="@{/search}">Back to search</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    // Client-side seat selection: keep a hidden field in sync with the chosen seat.
+    const seatInput = document.getElementById('seatNumberInput');
+    const selectedLabel = document.getElementById('selectedSeatLabel');
+    document.querySelectorAll('.seat').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (btn.disabled) return;
+            document.querySelectorAll('.seat.selected').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            seatInput.value = btn.dataset.seat;
+            selectedLabel.textContent = btn.dataset.seat;
+        });
+    });
+
+    // Show the fields relevant to the chosen payment method.
+    function togglePayment() {
+        const method = document.getElementById('paymentMethod').value;
+        document.getElementById('upiFields').style.display = method === 'UPI' ? 'flex' : 'none';
+        document.getElementById('cardFields').style.display = method === 'CARD' ? 'flex' : 'none';
+        document.getElementById('bankFields').style.display = method === 'NETBANKING' ? 'flex' : 'none';
+    }
+    togglePayment();
+</script>
+</body>
+</html>

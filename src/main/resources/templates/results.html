@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results · Airline Booking System</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Available flights</h1>
+        <p class="subtitle">
+            <span th:text="${source == null or source.isBlank() ? 'Any' : source}"></span>
+            →
+            <span th:text="${destination == null or destination.isBlank() ? 'Any' : destination}"></span>
+            ·
+            Travel date: <strong th:text="${travelDate ?: 'not set'}"></strong>
+            <span th:if="${luggage}" class="badge badge-economy">+ Extra luggage</span>
+            <span th:if="${meals}" class="badge badge-business">+ Meals</span>
+        </p>
+        <a class="btn btn-secondary btn-sm" th:href="@{/addons(source=${source},destination=${destination},travelDate=${travelDate},seatClass=${seatClass},sort=${sort})}">
+            Change add-ons
+        </a>
+    </div>
+
+    <div class="card">
+        <h2>Filter</h2>
+        <form method="get" th:action="@{/results}">
+            <input type="hidden" name="source" th:value="${source}">
+            <input type="hidden" name="destination" th:value="${destination}">
+            <input type="hidden" name="seatClass" th:value="${seatClass}">
+            <input type="hidden" name="travelDate" th:value="${travelDate}">
+            <input type="hidden" name="sort" th:value="${sort}">
+            <input type="hidden" name="luggage" th:value="${luggage}">
+            <input type="hidden" name="meals" th:value="${meals}">
+
+            <div class="form-row">
+                <div class="field">
+                    <label for="airline">Airline</label>
+                    <select id="airline" name="airline">
+                        <option value="">All airlines</option>
+                        <option th:each="a : ${airlines}" th:value="${a}"
+                                th:text="${a}" th:selected="${a == airline}"></option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="minPrice">Min price (₹)</label>
+                    <input type="number" min="0" step="100" id="minPrice" name="minPrice"
+                           th:value="${minPrice}">
+                </div>
+                <div class="field">
+                    <label for="maxPrice">Max price (₹)</label>
+                    <input type="number" min="0" step="100" id="maxPrice" name="maxPrice"
+                           th:value="${maxPrice}">
+                </div>
+                <div class="field">
+                    <label for="size">Per page</label>
+                    <select id="size" name="size">
+                        <option th:each="n : ${ {10, 20, 50, 100} }" th:value="${n}"
+                                th:text="${n}" th:selected="${n == size}"></option>
+                    </select>
+                </div>
+                <div class="field" style="flex:0 0 auto;">
+                    <button class="btn" type="submit">Apply</button>
+                </div>
+                <div class="field" style="flex:0 0 auto;">
+                    <a class="btn btn-secondary"
+                       th:href="@{/results(source=${source},destination=${destination},seatClass=${seatClass},travelDate=${travelDate},sort=${sort},luggage=${luggage},meals=${meals})}">Clear</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="card">
+        <h2>Results
+            <span class="subtitle"
+                  th:text="'(' + ${totalRows} + ')'"></span>
+            <span class="subtitle" th:if="${totalRows > 0}"
+                  th:text="'· showing ' + ${from} + '–' + ${to}"></span>
+        </h2>
+
+        <div class="empty" th:if="${#lists.isEmpty(rows)}">
+            No flights match your search or filters. Try different cities or widen the price range.
+        </div>
+
+        <table th:if="${not #lists.isEmpty(rows)}">
+            <thead>
+            <tr>
+                <th>Airline</th>
+                <th>Flight</th>
+                <th>Route</th>
+                <th>Departs</th>
+                <th>Duration</th>
+                <th>Class</th>
+                <th>Fare</th>
+                <th>Add-ons</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="row : ${rows}">
+                <td th:text="${row.flight.airline}">Airline</td>
+                <td th:text="${row.flight.flightNumber}">AI-101</td>
+                <td th:text="${row.flight.sourceCode} + ' → ' + ${row.flight.destinationCode}">DEL → BOM</td>
+                <td th:text="${row.flight.departureTime == null ? 'TBA' : #temporals.format(row.flight.departureTime, 'HH:mm')}">09:00</td>
+                <td th:text="${#numbers.formatDecimal(row.flight.durationHours, 1, 1)} + ' h'">2.0 h</td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${row.flight.seatClass.name() == 'BUSINESS' ? 'badge-business' : 'badge-economy'}"
+                          th:text="${row.flight.seatClass.name() == 'BUSINESS' ? 'Business' : 'Economy'}">Economy</span>
+                </td>
+                <td th:text="'₹' + ${#numbers.formatDecimal(row.flight.fare, 1, 2)}">₹5000</td>
+                <td th:text="'₹' + ${#numbers.formatDecimal(row.addOnAmount, 1, 2)}">₹0</td>
+                <td>
+                    <strong th:text="'₹' + ${#numbers.formatDecimal(row.total, 1, 2)}">₹5000</strong>
+                </td>
+                <td>
+                    <a class="btn btn-sm"
+                       th:href="@{/book/{id}(id=${row.flight.id},travelDate=${travelDate},luggage=${luggage},meals=${meals})}">Select</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination" th:if="${totalPages > 1}">
+            <a class="btn btn-sm btn-secondary"
+               th:classappend="${page == 1 ? 'disabled' : ''}"
+               th:href="${page == 1} ? '#' : @{/results(page=${page - 1},source=${source},destination=${destination},seatClass=${seatClass},travelDate=${travelDate},sort=${sort},luggage=${luggage},meals=${meals},airline=${airline},minPrice=${minPrice},maxPrice=${maxPrice},size=${size})}">
+                ← Prev
+            </a>
+
+            <span th:each="p : ${#numbers.sequence(1, totalPages)}" th:if="${totalPages <= 10}">
+                <a class="btn btn-sm"
+                   th:classappend="${p == page} ? 'active' : 'btn-secondary'"
+                   th:href="@{/results(page=${p},source=${source},destination=${destination},seatClass=${seatClass},travelDate=${travelDate},sort=${sort},luggage=${luggage},meals=${meals},airline=${airline},minPrice=${minPrice},maxPrice=${maxPrice},size=${size})}"
+                   th:text="${p}">1</a>
+            </span>
+            <span class="subtitle" th:if="${totalPages > 10}"
+                  th:text="'Page ' + ${page} + ' of ' + ${totalPages}"></span>
+
+            <a class="btn btn-sm btn-secondary"
+               th:classappend="${page == totalPages ? 'disabled' : ''}"
+               th:href="${page == totalPages} ? '#' : @{/results(page=${page + 1},source=${source},destination=${destination},seatClass=${seatClass},travelDate=${travelDate},sort=${sort},luggage=${luggage},meals=${meals},airline=${airline},minPrice=${minPrice},maxPrice=${maxPrice},size=${size})}">
+                Next →
+            </a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Something went wrong · Airline Booking System</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Something went wrong</h1>
+        <div class="alert alert-error" th:text="${message}">Error message</div>
+        <p class="subtitle" th:if="${path}" th:text="'Requested: ' + ${path}"></p>
+        <div class="actions">
+            <a class="btn" th:href="@{/search}">Back to search</a>
+            <a class="btn btn-secondary" th:href="@{/bookings}">My bookings</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

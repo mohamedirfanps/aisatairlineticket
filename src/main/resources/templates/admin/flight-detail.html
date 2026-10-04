@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight details · Admin</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Flight details</h1>
+        <p class="subtitle"><a th:href="@{/admin/flights}">← Flights</a></p>
+        <dl class="ticket" style="border:none;">
+            <dt>ID</dt><dd th:text="${flight.id}">1</dd>
+            <dt>Airline</dt><dd th:text="${flight.airline}">Airline</dd>
+            <dt>Flight number</dt><dd th:text="${flight.flightNumber}">AI-101</dd>
+            <dt>Route</dt><dd th:text="${flight.source} + ' → ' + ${flight.destination}">Delhi → Mumbai</dd>
+            <dt>Departs</dt><dd th:text="${flight.departureTime == null ? 'TBA' : #temporals.format(flight.departureTime, 'HH:mm')}">09:00</dd>
+            <dt>Arrives</dt><dd th:text="${flight.arrivalTime == null ? 'TBA' : #temporals.format(flight.arrivalTime, 'HH:mm')}">11:00</dd>
+            <dt>Duration</dt><dd th:text="${#numbers.formatDecimal(flight.durationHours,1,1)} + ' h'">2.0 h</dd>
+            <dt>Stops</dt><dd th:text="${flight.stops}">0</dd>
+            <dt>Class</dt><dd th:text="${flight.seatClass.name() == 'BUSINESS' ? 'Business' : 'Economy'}">Economy</dd>
+            <dt>Base fare</dt><dd th:text="'₹' + ${#numbers.formatDecimal(flight.baseFare,1,2)}">₹0</dd>
+            <dt>Final fare</dt><dd th:text="'₹' + ${#numbers.formatDecimal(flight.fare,1,2)}">₹0</dd>
+        </dl>
+        <div class="actions" style="margin-top:16px;">
+            <a class="btn" th:href="@{/admin/flights/{id}/edit(id=${flight.id})}">Edit</a>
+            <a class="btn btn-secondary" th:href="@{/admin/flights}">Back</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

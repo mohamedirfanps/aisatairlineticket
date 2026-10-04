@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports · Airline Booking System</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>Reports &amp; analytics</h1>
+        <p class="subtitle">Aggregated from the bookings table using Java Streams.</p>
+    </div>
+
+    <div class="stats">
+        <div class="stat">
+            <div class="value" th:text="'₹' + ${#numbers.formatDecimal(revenue, 1, 2)}">₹0</div>
+            <div class="label">Total revenue</div>
+        </div>
+        <div class="stat">
+            <div class="value" th:text="${confirmed}">0</div>
+            <div class="label">Confirmed bookings</div>
+        </div>
+        <div class="stat">
+            <div class="value" th:text="${cancelled}">0</div>
+            <div class="label">Cancelled bookings</div>
+        </div>
+        <div class="stat">
+            <div class="value" th:text="'₹' + ${#numbers.formatDecimal(avgFare, 1, 2)}">₹0</div>
+            <div class="label">Average fare</div>
+        </div>
+        <div class="stat">
+            <div class="value" th:text="'₹' + ${#numbers.formatDecimal(maxFare, 1, 2)}">₹0</div>
+            <div class="label">Highest fare</div>
+        </div>
+        <div class="stat">
+            <div class="value" th:text="'₹' + ${#numbers.formatDecimal(minFare, 1, 2)}">₹0</div>
+            <div class="label">Lowest fare</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Bookings by route</h2>
+        <div class="empty" th:if="${#maps.isEmpty(byRoute)}">No bookings yet.</div>
+        <table th:if="${not #maps.isEmpty(byRoute)}">
+            <thead><tr><th>Route</th><th>Bookings</th></tr></thead>
+            <tbody>
+            <tr th:each="entry : ${byRoute}">
+                <td th:text="${entry.key}">Delhi → Mumbai</td>
+                <td th:text="${entry.value}">3</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>All bookings</h2>
+        <div class="empty" th:if="${#lists.isEmpty(bookings)}">No bookings yet.</div>
+        <table th:if="${not #lists.isEmpty(bookings)}">
+            <thead>
+            <tr><th>PNR</th><th>Passenger</th><th>Route</th><th>Seat</th><th>Fare</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="b : ${bookings}">
+                <td th:text="${b.pnr}">PNR-1001</td>
+                <td th:text="${b.passengerName}">Name</td>
+                <td th:text="${b.source} + ' → ' + ${b.destination}">Delhi → Mumbai</td>
+                <td th:text="${b.seatClass.name() + ' ' + b.seatNumber}">Economy 1A</td>
+                <td th:text="'₹' + ${#numbers.formatDecimal(b.fare, 1, 2)}">₹5000</td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${b.status.name() == 'CONFIRMED' ? 'badge-confirmed' : 'badge-cancelled'}"
+                          th:text="${b.status.name() == 'CONFIRMED' ? 'Confirmed' : 'Cancelled'}">Confirmed</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

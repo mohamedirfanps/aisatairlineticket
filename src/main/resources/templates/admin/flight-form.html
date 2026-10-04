@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flight form · Admin</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1 th:text="${edit ? 'Edit flight' : 'Add flight'}">Add flight</h1>
+        <p class="subtitle"><a th:href="@{/admin/flights}">← Flights</a></p>
+
+        <form method="post" th:action="@{/admin/flights/save}" th:object="${flightForm}">
+            <input type="hidden" th:field="*{id}">
+            <div class="form-row">
+                <div class="field">
+                    <label for="flightNumber">Flight number</label>
+                    <input type="text" id="flightNumber" th:field="*{flightNumber}" required>
+                </div>
+                <div class="field">
+                    <label for="airline">Airline</label>
+                    <input type="text" id="airline" th:field="*{airline}" required>
+                </div>
+                <div class="field">
+                    <label for="source">Source city</label>
+                    <input list="cityList" id="source" th:field="*{source}" required>
+                </div>
+                <div class="field">
+                    <label for="destination">Destination city</label>
+                    <input list="cityList" id="destination" th:field="*{destination}" required>
+                </div>
+            </div>
+            <datalist id="cityList">
+                <option th:each="a : ${airports}" th:value="${a.city}"></option>
+            </datalist>
+            <div class="form-row">
+                <div class="field">
+                    <label for="durationHours">Duration (hours)</label>
+                    <input type="number" step="0.25" min="0.5" id="durationHours" th:field="*{durationHours}" required>
+                </div>
+                <div class="field">
+                    <label for="stops">Stops</label>
+                    <input type="number" min="0" id="stops" th:field="*{stops}" required>
+                </div>
+                <div class="field">
+                    <label for="seatClass">Class</label>
+                    <select id="seatClass" th:field="*{seatClass}">
+                        <option value="ECONOMY">Economy</option>
+                        <option value="BUSINESS">Business</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <label for="baseFare">Base fare (INR)</label>
+                    <input type="number" step="0.01" min="0" id="baseFare" th:field="*{baseFare}" required>
+                </div>
+            </div>
+            <div class="actions" style="margin-top:14px;">
+                <button class="btn" type="submit" th:text="${edit ? 'Save changes' : 'Add flight'}">Add</button>
+                <a class="btn btn-secondary" th:href="@{/admin/flights}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My bookings · Airline Booking System</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<header th:replace="~{fragments :: bar}"></header>
+
+<div class="container">
+    <div class="card">
+        <h1>My bookings</h1>
+        <p class="subtitle">All reservations made with your account.</p>
+
+        <div class="empty" th:if="${#lists.isEmpty(bookings)}">
+            You have no bookings yet. <a th:href="@{/search}">Search flights</a>.
+        </div>
+
+        <table th:if="${not #lists.isEmpty(bookings)}">
+            <thead>
+            <tr>
+                <th>PNR</th>
+                <th>Route</th>
+                <th>Flight</th>
+                <th>Seat</th>
+                <th>Fare</th>
+                <th>Status</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="b : ${bookings}">
+                <td th:text="${b.pnr}">PNR-1001</td>
+                <td th:text="${b.source} + ' → ' + ${b.destination}">Delhi → Mumbai</td>
+                <td th:text="${b.flightNumber}">AI-101</td>
+                <td th:text="${b.seatNumber}">1A</td>
+                <td th:text="'₹' + ${#numbers.formatDecimal(b.fare, 1, 2)}">₹5000</td>
+                <td>
+                    <span class="badge"
+                          th:classappend="${b.status.name() == 'CONFIRMED' ? 'badge-confirmed' : 'badge-cancelled'}"
+                          th:text="${b.status.name() == 'CONFIRMED' ? 'Confirmed' : 'Cancelled'}">Confirmed</span>
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-secondary" th:href="@{/ticket(pnr=${b.pnr})}">Ticket</a>
+                    <form method="post" th:action="@{/bookings/cancel}" style="display:inline;"
+                          th:if="${b.status.name() == 'CONFIRMED'}">
+                        <input type="hidden" name="pnr" th:value="${b.pnr}">
+                        <button class="btn btn-sm btn-danger" type="submit">Cancel</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
